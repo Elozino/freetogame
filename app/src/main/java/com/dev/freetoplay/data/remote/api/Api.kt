@@ -14,8 +14,8 @@ interface Api {
         @Query("id") id: Int
     ): GameDetailDto?
 
-    @GET("game")
-    suspend fun getGameByPlatform(
+    @GET("games")
+    suspend fun getGamesByPlatform(
         @Query("platform") platform: String
     ): List<GameDto>
 

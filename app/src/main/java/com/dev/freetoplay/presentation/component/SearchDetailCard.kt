@@ -69,12 +69,14 @@ fun SearchDetailCard(
                     )
                 }
             )
-            Column {
+            Column(
+                modifier = Modifier.padding(all = 10.dp)
+            ) {
                 Text(
                     text = game.title,
                     modifier = Modifier
                         .padding(5.dp)
-                        .align(alignment = Alignment.CenterHorizontally),
+                        .align(alignment = Alignment.Start),
                     style = MaterialTheme.typography.body1,
                     overflow = TextOverflow.Ellipsis,
                     color = MaterialTheme.colors.onPrimary
@@ -110,7 +112,7 @@ fun SearchDetailCard(
                             )
                         }
                     )
-                    Spacer(modifier = Modifier.padding(end = 3.dp))
+                    Spacer(modifier = Modifier.padding(end = 10.dp))
                     Platform(text = game.platform)
                 }
             }

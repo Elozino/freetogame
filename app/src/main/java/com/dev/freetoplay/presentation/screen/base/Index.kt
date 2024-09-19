@@ -1,7 +1,12 @@
 package com.dev.freetoplay.presentation.screen.base
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
@@ -38,7 +43,7 @@ fun Index(
     navController: NavHostController,
     availableGames: Resource<List<Game>>,
     onOpenDrawer: () -> Unit,
-    onSearchButtonClick: () -> Unit,
+    onSearchButtonClick: (List<Game>) -> Unit,
     onGameClick: (Int) -> Unit,
     onPlayTheGameClicked: (String) -> Unit,
     onHomeMenuClick: () -> Unit,
@@ -77,7 +82,7 @@ fun Index(
                         textStyle = MaterialTheme.typography.subtitle1,
                         textColor = MaterialTheme.colors.onBackground,
                         onClick = onHomeMenuClick,
-                        contentDescription = ""
+                        contentDescription = "",
                     )
                     Spacer(modifier = Modifier.padding(8.dp))
                     NavigationDrawerItem(
@@ -90,7 +95,7 @@ fun Index(
                         textStyle = MaterialTheme.typography.subtitle1,
                         textColor = MaterialTheme.colors.onBackground,
                         onClick = onPCGamesClick,
-                        contentDescription = ""
+                        contentDescription = "",
                     )
                     Spacer(modifier = Modifier.padding(8.dp))
                     NavigationDrawerItem(
@@ -103,7 +108,7 @@ fun Index(
                         textStyle = MaterialTheme.typography.subtitle1,
                         textColor = MaterialTheme.colors.onBackground,
                         onClick = onWebGamesClick,
-                        contentDescription = ""
+                        contentDescription = "",
                     )
                     Spacer(modifier = Modifier.padding(8.dp))
                     NavigationDrawerItem(
@@ -116,7 +121,7 @@ fun Index(
                         textStyle = MaterialTheme.typography.subtitle1,
                         textColor = MaterialTheme.colors.onBackground,
                         onClick = onLatestGamesClick,
-                        contentDescription = ""
+                        contentDescription = "",
                     )
                 }
             )
@@ -130,7 +135,7 @@ fun Index(
             composable(route = Screen.HomeScreen.route) {
                 HomeScreen(
                     onOpenDrawer = { onOpenDrawer() },
-                    onSearchButtonClick = { onSearchButtonClick() },
+                    onSearchButtonClick = { onSearchButtonClick(it) },
                     onGameClick = { gameId ->
                         onGameClick(gameId)
                     },
@@ -138,9 +143,9 @@ fun Index(
                 )
             }
             composable(route = Screen.GameDetailScreen.route) {
-                val viewModel = hiltViewModel<GameDetailViewModel>()
+                val gameDetailViewModel = hiltViewModel<GameDetailViewModel>()
                 GameDetailScreen(
-                    viewModel = viewModel,
+                    viewModel = gameDetailViewModel,
                     navController = navController,
                     onPlayTheGameClicked = { gameUrl ->
                         onPlayTheGameClicked(gameUrl)
@@ -156,12 +161,12 @@ fun Index(
                     }
                 )
             ) {
-                val viewModel = hiltViewModel<SearchViewModel>()
+                val searchViewModel = hiltViewModel<SearchViewModel>()
                 val games =
                     navController.previousBackStackEntry?.savedStateHandle?.get<List<Game>>(key = ALL_GAMES_KEY)
                         ?: emptyList()
                 SearchScreen(
-                    viewModel = viewModel,
+                    viewModel = searchViewModel,
                     navController = navController,
                     scaffoldState = scaffoldState,
                     games = games,

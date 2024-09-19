@@ -7,6 +7,6 @@ import com.dev.freetoplay.util.Resource
 interface GameRepository {
     suspend fun getAllGames(): Resource<List<Game>>
     suspend fun getGame(id: Int): Resource<GameDetail?>
-    suspend fun getGameByPlatform(platform: String): Resource<List<Game>>
+    suspend fun getGamesByPlatform(platform: String): Resource<List<Game>>
     suspend fun sortGames(criteria: String): Resource<List<Game>>
 }

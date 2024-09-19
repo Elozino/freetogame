@@ -5,7 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dev.freetoplay.data.repository.GameRepositoryImpl
 import com.dev.freetoplay.domain.model.Game
-import com.dev.freetoplay.util.*
+import com.dev.freetoplay.util.BROWSER_GAMES
+import com.dev.freetoplay.util.CURRENT_ROUTE_KEY
+import com.dev.freetoplay.util.LATEST_GAMES
+import com.dev.freetoplay.util.PC_GAMES
+import com.dev.freetoplay.util.Resource
+import com.dev.freetoplay.util.SEARCH_SCREEN_FILTER_KEY
+import com.dev.freetoplay.util.SEARCH_SCREEN_MODE_KEY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -51,7 +57,7 @@ class SearchViewModel @Inject constructor(
         }
 
         savedStateHandle.get<String>(key = SEARCH_SCREEN_FILTER_KEY)?.let { filter ->
-            when(filter){
+            when (filter) {
                 PC_GAMES -> getGamesByPlatform(filter = PC_GAMES)
                 BROWSER_GAMES -> getGamesByPlatform(filter = BROWSER_GAMES)
                 LATEST_GAMES -> getLatestGames()
@@ -69,22 +75,29 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun clearSearchQuery(){
+    fun clearSearchQuery() {
         _query.value = ""
     }
 
-    fun onQuery(query: String){
+    fun onQuery(query: String) {
         _query.value = query
     }
 
-    fun showSearchDetail(){
+    fun showSearchDetail() {
         _searchDetailVisible.value = true
+    }
+
+    fun setRoute(route: String) {
+        savedStateHandle.set(
+            key = CURRENT_ROUTE_KEY,
+            value = route
+        )
     }
 
     private fun getGamesByPlatform(filter: String) {
         viewModelScope.launch {
             _isLoading.send(true)
-            _games.value = when (val response = repository.getGameByPlatform(platform = filter)) {
+            _games.value = when (val response = repository.getGamesByPlatform(platform = filter)) {
                 is Resource.Success -> {
                     response.data ?: emptyList()
                 }
@@ -104,5 +117,4 @@ class SearchViewModel @Inject constructor(
             _isLoading.send(false)
         }
     }
-
 }

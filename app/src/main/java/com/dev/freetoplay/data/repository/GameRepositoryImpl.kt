@@ -33,9 +33,9 @@ class GameRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getGameByPlatform(platform: String): Resource<List<Game>> {
+    override suspend fun getGamesByPlatform(platform: String): Resource<List<Game>> {
         val response = invokeApi {
-            api.getGameByPlatform(platform)
+            api.getGamesByPlatform(platform)
         }
         return when (response) {
             is Resource.Error -> Resource.Error(error = response.error)
