@@ -1,0 +1,33 @@
+name: Freetoplay Android APK
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: 'gradle'
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Build Application
+        run: |
+          ./gradlew assembleRelease
+
+      - name: Upload Application
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/outputs/apk/release/app-release.apk
